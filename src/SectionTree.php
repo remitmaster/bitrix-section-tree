@@ -23,6 +23,8 @@ final class SectionTree
             $nodes[$id][$childrenKey] = [];
         }
 
+        // By-reference: a later append to $nodes[$id][$childrenKey] must be visible
+        // through whichever array already holds this node (root or a parent's children).
         $roots = [];
         foreach ($items as $item) {
             $id = $item[$idKey];
