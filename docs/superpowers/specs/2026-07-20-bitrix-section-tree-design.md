@@ -9,11 +9,11 @@
 - пакет был переиспользуем вне Bitrix (вход/выход — обычные PHP-массивы),
 - в посте показать, как пакет оборачивает реальный вызов `\Bitrix\Iblock\SectionTable::getList()`.
 
-Репозиторий пакета: `/Users/anastasiayunalieva/Work/MyProjects/packages/bitrix-section-tree`, remote `git@github.com:remitmaster/bitrix-section-tree.git` — отдельно от `ramik-blog`.
+Репозиторий пакета: `/Users/anastasiayunalieva/Work/MyProjects/packages/bitrix-section-tree`, remote `git@github.com:remitmaster/bitrix-section-tree.git` (GitHub-аккаунт не меняется), composer package `yunaweb/bitrix-section-tree` — отдельно от `ramik-blog`.
 
 ## Скоуп
 
-Один класс `SectionTree` (namespace `Remitmaster\SectionTree`), три статических метода:
+Один класс `SectionTree` (namespace `Yunaweb\SectionTree`), три статических метода:
 
 ```php
 final class SectionTree
@@ -65,7 +65,7 @@ final class SectionTree
 | Цикл (`parent_id` элемента, прямо или через цепочку, указывает на самого себя) | `SectionTreeException` — иначе бесконечная рекурсия |
 | `breadcrumbs()` на ID, которого нет в `$items` | `SectionTreeException` |
 
-Одно исключение `Remitmaster\SectionTree\Exception\SectionTreeException extends \InvalidArgumentException` на все три случая — типизированный маркер "ошибка входных данных", details в message.
+Одно исключение `Yunaweb\SectionTree\Exception\SectionTreeException extends \InvalidArgumentException` на все три случая — типизированный маркер "ошибка входных данных", details в message.
 
 ## Структура пакета
 
@@ -83,7 +83,7 @@ bitrix-section-tree/
   phpunit.xml
 ```
 
-`composer.json`: `name: remitmaster/bitrix-section-tree`, `require: php >=8.1`, `require-dev: phpunit/phpunit ^10.5`, PSR-4 autoload `Remitmaster\SectionTree\` → `src/`, dev-autoload `Remitmaster\SectionTree\Tests\` → `tests/`.
+`composer.json`: `name: yunaweb/bitrix-section-tree`, `require: php >=8.1`, `require-dev: phpunit/phpunit ^10.5`, PSR-4 autoload `Yunaweb\SectionTree\` → `src/`, dev-autoload `Yunaweb\SectionTree\Tests\` → `tests/`.
 
 ## Тесты (PHPUnit, без Bitrix-окружения)
 
