@@ -27,6 +27,7 @@ final class SectionTree
 
     public static function toFlat(
         array $tree,
+        string $idKey = 'ID',
         string $childrenKey = 'CHILDREN'
     ): array;
 
