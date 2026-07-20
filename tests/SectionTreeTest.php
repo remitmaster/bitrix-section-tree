@@ -144,4 +144,53 @@ final class SectionTreeTest extends TestCase
         $this->assertSame([1, 2], $flat[1]['PATH']);
         $this->assertSame([3], $flat[2]['PATH']);
     }
+
+    public function testBreadcrumbsReturnsChainFromRootToTarget(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Root'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'Child'],
+            ['ID' => 3, 'IBLOCK_SECTION_ID' => 2, 'NAME' => 'Grandchild'],
+            ['ID' => 4, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'Unrelated'],
+        ];
+
+        $chain = SectionTree::breadcrumbs($items, 3);
+
+        $this->assertSame(['Root', 'Child', 'Grandchild'], array_column($chain, 'NAME'));
+    }
+
+    public function testBreadcrumbsThrowsWhenIdNotFound(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Root'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::breadcrumbs($items, 999);
+    }
+
+    public function testBreadcrumbsThrowsOnDuplicateId(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'First'],
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Duplicate'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::breadcrumbs($items, 1);
+    }
+
+    public function testBreadcrumbsThrowsOnCycle(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => 2, 'NAME' => 'A'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'B'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::breadcrumbs($items, 1);
+    }
 }

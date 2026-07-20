@@ -81,6 +81,44 @@ final class SectionTree
         }
     }
 
+    public static function breadcrumbs(
+        array $items,
+        int|string $id,
+        string $idKey = 'ID',
+        string $parentKey = 'IBLOCK_SECTION_ID'
+    ): array {
+        self::assertNoDuplicateIds($items, $idKey);
+
+        $nodes = [];
+        foreach ($items as $item) {
+            $nodes[$item[$idKey]] = $item;
+        }
+
+        if (!array_key_exists($id, $nodes)) {
+            throw new SectionTreeException(sprintf('Section id "%s" not found.', (string) $id));
+        }
+
+        $chain = [];
+        $currentId = $id;
+        $seen = [];
+
+        while ($currentId !== null && array_key_exists($currentId, $nodes)) {
+            if (isset($seen[$currentId])) {
+                throw new SectionTreeException(sprintf('Cycle detected involving section id "%s".', (string) $currentId));
+            }
+            $seen[$currentId] = true;
+
+            $chain[] = $nodes[$currentId];
+
+            $currentId = $nodes[$currentId][$parentKey] ?? null;
+            if ($currentId === 0 || $currentId === '') {
+                $currentId = null;
+            }
+        }
+
+        return array_reverse($chain);
+    }
+
     private static function assertNoDuplicateIds(array $items, string $idKey): void
     {
         $seen = [];
