@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-07-21
+
 ### Added
 - `SectionTree::toTree()` — плоский список → дерево
 - `SectionTree::toFlat()` — дерево → плоский список с `DEPTH`/`PATH`
