@@ -62,7 +62,8 @@ $flat = SectionTree::toFlat(SectionTree::toTree($sections));
 
 foreach ($flat as $section) {
     $indent = str_repeat('— ', $section['DEPTH']);
-    echo "<option value=\"{$section['ID']}\">{$indent}{$section['NAME']}</option>\n";
+    echo '<option value="' . htmlspecialchars((string) $section['ID']) . '">'
+        . $indent . htmlspecialchars($section['NAME']) . "</option>\n";
 }
 ```
 
@@ -96,7 +97,12 @@ SectionTree::toTree($items, idKey: 'id', parentKey: 'parent_id');
 
 ## Ошибки
 
-Дублирующийся id, циклическая ссылка на родителя или `breadcrumbs()` с несуществующим id бросают `Yunaweb\SectionTree\Exception\SectionTreeException`.
+Отсутствующий `idKey` в элементе, дублирующийся id, циклическая ссылка на родителя или `breadcrumbs()` с несуществующим id бросают `Yunaweb\SectionTree\Exception\SectionTreeException`.
+
+## Ограничения
+
+- Библиотека сама ничего не экранирует — `NAME` и другие поля из вашего источника данных попадают в вывод как есть. Перед выводом в HTML используйте `htmlspecialchars()` (см. примеры выше).
+- `toTree()`/`toFlat()` не рассчитаны на непроверенные данные с неограниченной глубиной вложенности: на цепочке из нескольких тысяч уровней проверка циклов и подсчёт `PATH` работают за O(n²) по времени/памяти. Для типичной глубины разделов каталога (единицы–десятки уровней) это не заметно, но для импорта из недоверенного источника с неизвестной глубиной ограничьте её до вызова библиотеки.
 
 ## Тесты
 
