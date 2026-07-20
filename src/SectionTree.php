@@ -35,7 +35,7 @@ final class SectionTree
             $id = $item[$idKey];
             $parentId = $item[$parentKey] ?? null;
 
-            if ($parentId === null || $parentId === 0 || $parentId === '' || !array_key_exists($parentId, $nodes)) {
+            if ($parentId === null || $parentId === '' || !array_key_exists($parentId, $nodes)) {
                 $roots[] = &$nodes[$id];
             } else {
                 $nodes[$parentId][$childrenKey][] = &$nodes[$id];
@@ -114,7 +114,7 @@ final class SectionTree
             $chain[] = $nodes[$currentId];
 
             $currentId = $nodes[$currentId][$parentKey] ?? null;
-            if ($currentId === 0 || $currentId === '') {
+            if ($currentId === '') {
                 $currentId = null;
             }
         }
@@ -126,6 +126,10 @@ final class SectionTree
     {
         $seen = [];
         foreach ($items as $item) {
+            if (!array_key_exists($idKey, $item)) {
+                throw new SectionTreeException(sprintf('Missing required key "%s" in a section item.', $idKey));
+            }
+
             $id = $item[$idKey];
             if (isset($seen[$id])) {
                 throw new SectionTreeException(sprintf('Duplicate section id "%s".', (string) $id));
@@ -144,7 +148,7 @@ final class SectionTree
         foreach ($parentOf as $id => $parentId) {
             $seen = [$id => true];
 
-            while ($parentId !== null && $parentId !== 0 && $parentId !== '' && array_key_exists($parentId, $parentOf)) {
+            while ($parentId !== null && $parentId !== '' && array_key_exists($parentId, $parentOf)) {
                 if (isset($seen[$parentId])) {
                     throw new SectionTreeException(sprintf('Cycle detected involving section id "%s".', (string) $id));
                 }

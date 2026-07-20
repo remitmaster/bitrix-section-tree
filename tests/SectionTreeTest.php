@@ -58,6 +58,50 @@ final class SectionTreeTest extends TestCase
         $this->assertSame('Orphan', $tree[1]['NAME']);
     }
 
+    public function testToTreeLinksRealZeroIdNodeRegardlessOfParentValueType(): void
+    {
+        $itemsWithIntParent = [
+            ['ID' => 0, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'ZeroRoot'],
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => 0, 'NAME' => 'ChildOfZero'],
+        ];
+        $itemsWithStringParent = [
+            ['ID' => 0, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'ZeroRoot'],
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => '0', 'NAME' => 'ChildOfZero'],
+        ];
+
+        $treeInt = SectionTree::toTree($itemsWithIntParent);
+        $treeString = SectionTree::toTree($itemsWithStringParent);
+
+        $this->assertCount(1, $treeInt);
+        $this->assertSame('ChildOfZero', $treeInt[0]['CHILDREN'][0]['NAME']);
+        $this->assertCount(1, $treeString);
+        $this->assertSame('ChildOfZero', $treeString[0]['CHILDREN'][0]['NAME']);
+    }
+
+    public function testToTreeStillTreatsZeroAsNoParentWhenNoZeroIdNodeExists(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => 0, 'NAME' => 'Root'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'Child'],
+        ];
+
+        $tree = SectionTree::toTree($items);
+
+        $this->assertCount(1, $tree);
+        $this->assertSame('Root', $tree[0]['NAME']);
+    }
+
+    public function testToTreeThrowsOnMissingIdKey(): void
+    {
+        $items = [
+            ['NAME' => 'NoId'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::toTree($items);
+    }
+
     public function testToTreeThrowsOnDuplicateId(): void
     {
         $items = [
@@ -187,6 +231,17 @@ final class SectionTreeTest extends TestCase
         $items = [
             ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'First'],
             ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Duplicate'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::breadcrumbs($items, 1);
+    }
+
+    public function testBreadcrumbsThrowsOnMissingIdKey(): void
+    {
+        $items = [
+            ['NAME' => 'NoId'],
         ];
 
         $this->expectException(SectionTreeException::class);
