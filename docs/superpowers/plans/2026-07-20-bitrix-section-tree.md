@@ -156,7 +156,7 @@ git commit -m "chore: scaffold package (composer, license, changelog, phpunit)"
 - Create: `src/Exception/SectionTreeException.php`
 - Test: `tests/SectionTreeTest.php` (new file)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```php
 <?php
@@ -177,12 +177,12 @@ final class SectionTreeTest extends TestCase
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `vendor/bin/phpunit`
 Expected: FAIL — `Class "Yunaweb\SectionTree\Exception\SectionTreeException" not found`
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```php
 <?php
@@ -196,12 +196,12 @@ final class SectionTreeException extends \InvalidArgumentException
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `vendor/bin/phpunit`
 Expected: PASS (1 test, 1 assertion)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/Exception/SectionTreeException.php tests/SectionTreeTest.php
@@ -216,7 +216,7 @@ git commit -m "feat: add SectionTreeException"
 - Create: `src/SectionTree.php`
 - Modify: `tests/SectionTreeTest.php`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Add to `tests/SectionTreeTest.php` inside the `SectionTreeTest` class (add `use Yunaweb\SectionTree\SectionTree;` to the `use` block at top):
 
@@ -251,12 +251,12 @@ Add to `tests/SectionTreeTest.php` inside the `SectionTreeTest` class (add `use 
     }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `vendor/bin/phpunit`
 Expected: FAIL — `Class "Yunaweb\SectionTree\SectionTree" not found`
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```php
 <?php
@@ -301,12 +301,12 @@ final class SectionTree
 }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `vendor/bin/phpunit`
 Expected: PASS (3 tests, N assertions)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/SectionTree.php tests/SectionTreeTest.php
@@ -321,7 +321,7 @@ git commit -m "feat: add SectionTree::toTree() happy path"
 - Modify: `src/SectionTree.php`
 - Modify: `tests/SectionTreeTest.php`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```php
     public function testToTreeAttachesOrphansToRootWhenParentMissing(): void
@@ -374,12 +374,12 @@ git commit -m "feat: add SectionTree::toTree() happy path"
     }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `vendor/bin/phpunit`
 Expected: FAIL — `testToTreeAttachesOrphansToRootWhenParentMissing` passes already (orphan handling already works from Task 3 implementation), but `testToTreeThrowsOnDuplicateId`, `testToTreeThrowsOnSelfReferencingCycle`, `testToTreeThrowsOnIndirectCycle` FAIL — no exception thrown (duplicate silently overwrites, cycle causes the existing `toTree()` to build a self-referencing array without erroring, which PHPUnit will still let return but the assertion `expectException` fails since no exception was thrown).
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Replace `src/SectionTree.php` with:
 
@@ -463,12 +463,12 @@ final class SectionTree
 }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `vendor/bin/phpunit`
 Expected: PASS (7 tests, N assertions)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/SectionTree.php tests/SectionTreeTest.php
@@ -483,7 +483,7 @@ git commit -m "feat: validate duplicate ids and cycles in SectionTree::toTree()"
 - Modify: `src/SectionTree.php`
 - Modify: `tests/SectionTreeTest.php`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```php
     public function testToFlatReturnsEmptyArrayForEmptyTree(): void
@@ -539,12 +539,12 @@ git commit -m "feat: validate duplicate ids and cycles in SectionTree::toTree()"
     }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `vendor/bin/phpunit`
 Expected: FAIL — `Call to undefined method Yunaweb\SectionTree\SectionTree::toFlat()`
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Add to `src/SectionTree.php`, inside the `SectionTree` class (after `toTree()`):
 
@@ -586,12 +586,12 @@ Add to `src/SectionTree.php`, inside the `SectionTree` class (after `toTree()`):
     }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `vendor/bin/phpunit`
 Expected: PASS (10 tests, N assertions)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/SectionTree.php tests/SectionTreeTest.php
@@ -606,7 +606,7 @@ git commit -m "feat: add SectionTree::toFlat()"
 - Modify: `src/SectionTree.php`
 - Modify: `tests/SectionTreeTest.php`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```php
     public function testBreadcrumbsReturnsChainFromRootToTarget(): void
@@ -659,12 +659,12 @@ git commit -m "feat: add SectionTree::toFlat()"
     }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `vendor/bin/phpunit`
 Expected: FAIL — `Call to undefined method Yunaweb\SectionTree\SectionTree::breadcrumbs()`
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Add to `src/SectionTree.php`, inside the `SectionTree` class (after `toFlat()` and its private helpers):
 
@@ -708,12 +708,12 @@ Add to `src/SectionTree.php`, inside the `SectionTree` class (after `toFlat()` a
     }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `vendor/bin/phpunit`
 Expected: PASS (14 tests, N assertions)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/SectionTree.php tests/SectionTreeTest.php
@@ -727,7 +727,7 @@ git commit -m "feat: add SectionTree::breadcrumbs()"
 **Files:**
 - Create: `README.md`
 
-- [ ] **Step 1: Write `README.md`**
+- [x] **Step 1: Write `README.md`**
 
 ```markdown
 # yunaweb/bitrix-section-tree
@@ -811,7 +811,7 @@ vendor/bin/phpunit
 MIT
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add README.md
@@ -822,6 +822,6 @@ git commit -m "docs: add README with usage examples"
 
 ## Final Verification
 
-- [ ] Run full test suite one more time: `vendor/bin/phpunit` — expect all tests PASS, no warnings.
-- [ ] Run `composer validate` — expect no errors.
-- [ ] Confirm `git log --oneline` shows one commit per task, working tree clean (`git status`).
+- [x] Run full test suite one more time: `vendor/bin/phpunit` — expect all tests PASS, no warnings.
+- [x] Run `composer validate` — expect no errors.
+- [x] Confirm `git log --oneline` shows one commit per task, working tree clean (`git status`).
