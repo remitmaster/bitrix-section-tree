@@ -98,6 +98,9 @@ final class SectionTree
             throw new SectionTreeException(sprintf('Section id "%s" not found.', (string) $id));
         }
 
+        // Own cycle guard instead of assertNoCycles(): only this one chain needs
+        // checking (not the whole dataset), and the message can name the id the
+        // walk actually looped back to, not just the chain's starting id.
         $chain = [];
         $currentId = $id;
         $seen = [];

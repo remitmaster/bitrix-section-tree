@@ -159,6 +159,18 @@ final class SectionTreeTest extends TestCase
         $this->assertSame(['Root', 'Child', 'Grandchild'], array_column($chain, 'NAME'));
     }
 
+    public function testBreadcrumbsOnRootReturnsSingleElementChain(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Root'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'Child'],
+        ];
+
+        $chain = SectionTree::breadcrumbs($items, 1);
+
+        $this->assertSame(['Root'], array_column($chain, 'NAME'));
+    }
+
     public function testBreadcrumbsThrowsWhenIdNotFound(): void
     {
         $items = [
