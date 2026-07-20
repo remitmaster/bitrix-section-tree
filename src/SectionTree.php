@@ -45,6 +45,42 @@ final class SectionTree
         return $roots;
     }
 
+    public static function toFlat(
+        array $tree,
+        string $idKey = 'ID',
+        string $childrenKey = 'CHILDREN'
+    ): array {
+        $result = [];
+        self::flattenLevel($tree, $idKey, $childrenKey, [], $result);
+
+        return $result;
+    }
+
+    private static function flattenLevel(
+        array $nodes,
+        string $idKey,
+        string $childrenKey,
+        array $ancestorPath,
+        array &$result
+    ): void {
+        foreach ($nodes as $node) {
+            $children = $node[$childrenKey] ?? [];
+            unset($node[$childrenKey]);
+
+            $path = $ancestorPath;
+            $path[] = $node[$idKey];
+
+            $node['DEPTH'] = count($path) - 1;
+            $node['PATH'] = $path;
+
+            $result[] = $node;
+
+            if ($children !== []) {
+                self::flattenLevel($children, $idKey, $childrenKey, $path, $result);
+            }
+        }
+    }
+
     private static function assertNoDuplicateIds(array $items, string $idKey): void
     {
         $seen = [];

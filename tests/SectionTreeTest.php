@@ -92,4 +92,56 @@ final class SectionTreeTest extends TestCase
 
         SectionTree::toTree($items);
     }
+
+    public function testToFlatReturnsEmptyArrayForEmptyTree(): void
+    {
+        $this->assertSame([], SectionTree::toFlat([]));
+    }
+
+    public function testToFlatAddsDepthAndPath(): void
+    {
+        $tree = [
+            [
+                'ID' => 1,
+                'NAME' => 'Root',
+                'CHILDREN' => [
+                    [
+                        'ID' => 2,
+                        'NAME' => 'Child',
+                        'CHILDREN' => [
+                            ['ID' => 3, 'NAME' => 'Grandchild', 'CHILDREN' => []],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $flat = SectionTree::toFlat($tree);
+
+        $this->assertCount(3, $flat);
+        $this->assertSame(0, $flat[0]['DEPTH']);
+        $this->assertSame([1], $flat[0]['PATH']);
+        $this->assertArrayNotHasKey('CHILDREN', $flat[0]);
+        $this->assertSame(1, $flat[1]['DEPTH']);
+        $this->assertSame([1, 2], $flat[1]['PATH']);
+        $this->assertSame(2, $flat[2]['DEPTH']);
+        $this->assertSame([1, 2, 3], $flat[2]['PATH']);
+    }
+
+    public function testToFlatIsInverseOfToTree(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Root A'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'Child A1'],
+            ['ID' => 3, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Root B'],
+        ];
+
+        $flat = SectionTree::toFlat(SectionTree::toTree($items));
+
+        $names = array_column($flat, 'NAME');
+        $this->assertSame(['Root A', 'Child A1', 'Root B'], $names);
+        $this->assertSame([1], $flat[0]['PATH']);
+        $this->assertSame([1, 2], $flat[1]['PATH']);
+        $this->assertSame([3], $flat[2]['PATH']);
+    }
 }
