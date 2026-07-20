@@ -55,6 +55,37 @@ $rows = SectionTable::getList([
 $tree = SectionTree::toTree($rows);
 ```
 
+### Пример: `<select>` с отступами по уровню вложенности
+
+```php
+$flat = SectionTree::toFlat(SectionTree::toTree($sections));
+
+foreach ($flat as $section) {
+    $indent = str_repeat('— ', $section['DEPTH']);
+    echo "<option value=\"{$section['ID']}\">{$indent}{$section['NAME']}</option>\n";
+}
+```
+
+### Пример: рекурсивное меню (вложенные `<ul>`)
+
+```php
+function renderMenu(array $items): string
+{
+    $html = '<ul>';
+    foreach ($items as $item) {
+        $html .= '<li>' . htmlspecialchars($item['NAME']);
+        if ($item['CHILDREN'] !== []) {
+            $html .= renderMenu($item['CHILDREN']);
+        }
+        $html .= '</li>';
+    }
+
+    return $html . '</ul>';
+}
+
+echo renderMenu(SectionTree::toTree($sections));
+```
+
 ## Настраиваемые ключи
 
 Если поля называются не как в Bitrix (`ID` / `IBLOCK_SECTION_ID`), передайте свои имена:
