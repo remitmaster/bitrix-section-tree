@@ -43,4 +43,53 @@ final class SectionTreeTest extends TestCase
         $this->assertSame('Root B', $tree[1]['NAME']);
         $this->assertSame([], $tree[1]['CHILDREN']);
     }
+
+    public function testToTreeAttachesOrphansToRootWhenParentMissing(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Root'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 999, 'NAME' => 'Orphan'],
+        ];
+
+        $tree = SectionTree::toTree($items);
+
+        $this->assertCount(2, $tree);
+        $this->assertSame('Root', $tree[0]['NAME']);
+        $this->assertSame('Orphan', $tree[1]['NAME']);
+    }
+
+    public function testToTreeThrowsOnDuplicateId(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'First'],
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => null, 'NAME' => 'Duplicate'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::toTree($items);
+    }
+
+    public function testToTreeThrowsOnSelfReferencingCycle(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'SelfParent'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::toTree($items);
+    }
+
+    public function testToTreeThrowsOnIndirectCycle(): void
+    {
+        $items = [
+            ['ID' => 1, 'IBLOCK_SECTION_ID' => 2, 'NAME' => 'A'],
+            ['ID' => 2, 'IBLOCK_SECTION_ID' => 1, 'NAME' => 'B'],
+        ];
+
+        $this->expectException(SectionTreeException::class);
+
+        SectionTree::toTree($items);
+    }
 }
