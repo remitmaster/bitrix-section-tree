@@ -42,7 +42,7 @@ bitrix-section-tree/
 - Create: `.gitignore`
 - Create: `phpunit.xml`
 
-- [ ] **Step 1: Write `composer.json`**
+- [x] **Step 1: Write `composer.json`**
 
 ```json
 {
@@ -69,7 +69,7 @@ bitrix-section-tree/
 }
 ```
 
-- [ ] **Step 2: Write `LICENSE`** (MIT, copyright Ramil Yunaliev, current year 2026)
+- [x] **Step 2: Write `LICENSE`** (MIT, copyright Ramil Yunaliev, current year 2026)
 
 ```
 MIT License
@@ -95,7 +95,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-- [ ] **Step 3: Write `CHANGELOG.md`**
+- [x] **Step 3: Write `CHANGELOG.md`**
 
 ```markdown
 # Changelog
@@ -110,7 +110,7 @@ SOFTWARE.
 - `SectionTree::breadcrumbs()` — цепочка предков по id
 ```
 
-- [ ] **Step 4: Write `.gitignore`**
+- [x] **Step 4: Write `.gitignore`**
 
 ```
 /vendor/
@@ -118,7 +118,7 @@ composer.lock
 .phpunit.result.cache
 ```
 
-- [ ] **Step 5: Write `phpunit.xml`**
+- [x] **Step 5: Write `phpunit.xml`**
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -134,17 +134,19 @@ composer.lock
 </phpunit>
 ```
 
-- [ ] **Step 6: Install dependencies**
+- [x] **Step 6: Install dependencies**
 
 Run: `cd /Users/anastasiayunalieva/Work/MyProjects/packages/bitrix-section-tree && composer install`
 Expected: `vendor/` created, `composer.lock` created, no errors.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add composer.json LICENSE CHANGELOG.md .gitignore phpunit.xml composer.lock
 git commit -m "chore: scaffold package (composer, license, changelog, phpunit)"
 ```
+
+> **Deviation note (intentional):** `composer.lock` was left untracked — `.gitignore` excludes it (Step 4), matching standard Composer convention for `"type": "library"` packages (consumers resolve deps against their own project). Committed `52404af` covers the other 5 files only.
 
 ---
 
